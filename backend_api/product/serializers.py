@@ -14,6 +14,7 @@ class CategorySerializers(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+
 # Product Varient Section
 class ProductVarientImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,12 +22,33 @@ class ProductVarientImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image', 'image_url']
 
 
+# Product Variant Serializer for Variant Model
 class ProductVariantSerializers(serializers.ModelSerializer):
     product_varient_images = ProductVarientImageSerializer(many=True, required=False)
 
     class Meta:
         model = ProductVariant
-        fields = ['id', 'size', 'quantity', 'selling_price', 'discounted_price', 'discount_percent', 'product_varient_images']
+        fields = ['id', 'size', 'quantity', 'selling_price', 'discounted_price', 'discount_percent', 'product_varient_images','product']
+        depth = 1
+
+    def create(self, validated_data):
+        product_images_data = validated_data.pop('images', None)
+        product = Product.objects.create(**validated_data)
+
+        if product_images_data:
+            for image_data in product_images_data:
+                ProductImage.objects.create(products=product, **image_data)
+
+        return product
+    
+
+# Product Variant Serializer for Product Model
+class ProductVariantForProductSerializers(serializers.ModelSerializer):
+    product_varient_images = ProductVarientImageSerializer(many=True, required=False)
+
+    class Meta:
+        model = ProductVariant
+        fields = ['id', 'size', 'quantity', 'selling_price', 'discounted_price', 'discount_percent', 'product_varient_images',]
         depth = 1
 
     def create(self, validated_data):
@@ -51,15 +73,16 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializers(serializers.ModelSerializer):
-    product_variant = ProductVariantSerializers(many=True)
+    product_variant = ProductVariantForProductSerializers(many=True)
     product_images = ProductImageSerializer(many=True)
-    category = CategorySerializers(read_only=True)
-    category_id = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(), source='category', write_only=True
-    )
+    # category = CategorySerializers(read_only=True)
+    # category_id = serializers.PrimaryKeyRelatedField(
+    #     queryset=Category.objects.all(), source='category', write_only=True
+    # )
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description', 'slug','quantity', 'selling_price', 'discounted_price', 'discount_percent', 'brand', 'category','category_id', 'product_variant', 'product_images']
+        fields = ['id', 'title', 'description', 'slug','quantity', 'selling_price', 'discounted_price', 'discount_percent', 'brand', 'category', 'product_variant', 'product_images']
+        # excludes = ['product_variant__product']
 
     # def __init__(self,*args, **kwargs):
     #     super(ProductSerializers,self).__init__(*args, **kwargs)
@@ -69,7 +92,7 @@ class ProductSerializers(serializers.ModelSerializer):
         product_variant_data = validated_data.pop('product_variant')
         product_images_data = validated_data.pop('product_images')
         
-        category = validated_data.pop('category_id')
+        category = validated_data.pop('category')
         brand = validated_data.pop('brand', None)
         
 

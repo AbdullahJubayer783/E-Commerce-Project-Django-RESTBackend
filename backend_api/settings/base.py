@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'corsheaders',
     # Internal Packege
     'backend_api.product',
-    'backend_api.account'
+    'backend_api.account',
+    'backend_api.order_system',
 ]
 
 MIDDLEWARE = [
@@ -133,8 +134,8 @@ EMAIL_HOST_USER = env("EMAIL")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
   
 
 

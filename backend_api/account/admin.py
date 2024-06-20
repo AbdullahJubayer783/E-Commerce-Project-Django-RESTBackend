@@ -9,6 +9,7 @@ class UserModelAdmin(BaseUserAdmin):
     # that reference specific fields on auth.User.
     list_display = ["id","email","username", "name","user_role", "is_admin"]
     list_filter = ["is_admin"]
+    # readonly_fields = ('username',)
     fieldsets = [
         ("User Credentials", {"fields": ["email", "password"]}),
         ("Personal info", {"fields": ["name","user_role"]}),

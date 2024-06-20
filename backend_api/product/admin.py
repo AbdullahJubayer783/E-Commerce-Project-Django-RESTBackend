@@ -1,78 +1,3 @@
-# from django.contrib import admin
-# from .models import Brand , Category , Size , Product , ProductVariant , Review , Comment , ProductImage
-
-# class ProductVariantInline(admin.TabularInline):
-#     model = ProductVariant
-#     fk_name = 'product'  # Specify the correct ForeignKey
-    
-# class ProductVariantInline(admin.TabularInline):
-#     model = ProductVariant
-#     fk_name = 'product'  # Specify the correct ForeignKey
-
-# @admin.register(Product)
-# class ProductAdmin(admin.ModelAdmin):
-#     inlines = [ProductVariantInline]
-#     list_display = ('title', 'category', 'brand', 'created_at', 'updated_at')
-#     search_fields = ('title', 'description')
-#     prepopulated_fields = {'slug': ('title',)}
-
-# @admin.register(ProductVariant)
-# class ProductVariantAdmin(admin.ModelAdmin):
-#     list_display = ('product', 'image_url', 'quantity', 'selling_price', 'discounted_price')
-
-
-# admin.site.register(Brand)
-# admin.site.register(Category)
-# admin.site.register(Size)
-# admin.site.register(Review)
-# admin.site.register(ProductImage)
-# admin.site.register(Size)
-
-
-
-
-
-
-
-# ChatGPT Code
-
-
-# class ProductImageInline(admin.TabularInline):
-#     model = ProductImage
-#     extra = 1
-#     fk_name = 'product'
-
-# class ProductVariantImageInline(nested_admin.NestedStackedInline):
-#     model = ProductImage
-#     extra = 1
-#     fk_name = 'product_variant'
-
-# class ProductVariantInline(nested_admin.NestedStackedInline):
-#     model = ProductVariant
-#     extra = 1
-#     inlines = [ProductVariantImageInline]
-
-# @admin.register(ProductVariant)
-# class ProductVariantAdmin(nested_admin.NestedModelAdmin):
-#     inlines = [ProductVariantImageInline]
-#     list_display = ['product', 'quantity', 'selling_price', 'discounted_price', 'discount_percent']
-#     search_fields = ['product__title']
-#     list_filter = ['product']
-
-# @admin.register(Product)
-# class ProductAdmin(nested_admin.NestedModelAdmin):
-#     inlines = [ProductImageInline, ProductVariantInline]
-#     list_display = ['title', 'brand', 'category', 'selling_price', 'discounted_price', 'discount_percent']
-#     search_fields = ['title', 'description', 'category__name', 'brand__name']
-#     list_filter = ['brand', 'category']
-#     prepopulated_fields = {"slug": ("title",)}
-
-# @admin.register(ProductImage)
-# class ProductImageAdmin(admin.ModelAdmin):
-#     list_display = ['image_url', 'product', 'product_variant']
-#     search_fields = ['product__title', 'product_variant__product__title']
-#     list_filter = ['product__title', 'product_variant__product__title']
-
 #--------------------------------------------
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
@@ -101,11 +26,19 @@ class ProductAdmin(nested_admin.NestedModelAdmin):
     list_display = ['title', 'brand', 'category', 'selling_price', 'discounted_price', 'discount_percent']
     search_fields = ['title', 'description', 'category__name', 'brand__name']
     list_filter = ['brand', 'category']
+    readonly_fields = ['discount_percent', 'product_code']
     prepopulated_fields = {"slug": ("title",)}
+
+    def discount_percent(self, obj):
+        return obj.discount_percent
+
+    def product_code(self, obj):
+        return obj.product_code
+
 
 class ProductVarientAdmin(nested_admin.NestedModelAdmin):
     inlines = [ProductVarientImageInline]
-    list_display = ['product', 'quantity', 'selling_price', 'discounted_price', 'discount_percent']
+    list_display = ['product','id', 'quantity', 'selling_price', 'discounted_price', 'discount_percent']
     search_fields = ['product__title']
     list_filter = ['product']
 

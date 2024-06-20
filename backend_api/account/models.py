@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, password=None):
+    def create_user(self, email, name, password=None,password2=None):
         """
         Creates and saves a User with the given email, name, and password.
         """
@@ -10,11 +10,9 @@ class UserManager(BaseUserManager):
             raise ValueError("Users must have an email address")
 
         email = self.normalize_email(email)
-        username = email.split('@')[0]  # Extract the part before '@' for username
 
         user = self.model(
             email=email,
-            username=username,
             name=name,
         )
 

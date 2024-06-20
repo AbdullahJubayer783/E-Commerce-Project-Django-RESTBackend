@@ -2,6 +2,7 @@ from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 # from django.contrib.auth.models import User
 from backend_api.account.models import User
+from django.utils.crypto import get_random_string
 
 # Brand
 class Brand(models.Model):
@@ -71,6 +72,11 @@ class Product(ProductAndVariantsCommonFields):
     @property
     def discount_percent(self):
         return round(abs(((self.discounted_price / self.selling_price) * 100) - 100), 2)
+    
+    @property
+    def product_code(self):
+        code = '#' + get_random_string(10).upper()
+        return code 
 
 
 # Product Variant
