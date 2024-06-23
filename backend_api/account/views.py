@@ -4,7 +4,7 @@ from rest_framework import status , generics
 from rest_framework.views import APIView
 from backend_api.account.serializers import UserRegistrationSerializers , UserLoginSerializer , UserProfileSerializer , UserChangePasswordSerializers , SendPasswordResetEmailSerializer,UserPasswordResetSerializer , LogoutSerializer
 from django.contrib.auth import authenticate
-# from account.renderers import UserRenderer
+from backend_api.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 
@@ -24,7 +24,7 @@ def get_tokens_for_user(user):
     }
 
 class UserRegistrationView(APIView):
-    # renderer_classes = [UserRenderer]
+    renderer_classes = [UserRenderer]
     def post(self,request,format=None):
         serializer = UserRegistrationSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -34,7 +34,7 @@ class UserRegistrationView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 class UserLoginView(APIView):
-    # renderer_classes = [UserRenderer]
+    renderer_classes = [UserRenderer]
     def post(self,request,format = None):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -49,14 +49,14 @@ class UserLoginView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileView(APIView):
-    # renderer_classes = [UserRenderer]
+    renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
     def get(self,request,formet=None):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 class UserChangePasswordView(APIView):
-    # renderer_classes = [UserRenderer]
+    renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
     def post(self , request , formate=None):
         serializer = UserChangePasswordSerializers(data = request.data,context={'user':request.user})
@@ -65,7 +65,7 @@ class UserChangePasswordView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class SendPasswordResetEmailView(APIView):
-    # renderer_classes = [UserRenderer]
+    renderer_classes = [UserRenderer]
     def post(self,request,formate=None):
         serializer = SendPasswordResetEmailSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -73,7 +73,7 @@ class SendPasswordResetEmailView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class UserPasswordResetView(APIView):
-    # renderer_classes = [UserRenderer]
+    renderer_classes = [UserRenderer]
     def post(self,request,uid , token , formate=None):
         serializer = UserPasswordResetSerializer(data = request.data,context={'uid':uid,'token':token})
         if serializer.is_valid(raise_exception=True):
