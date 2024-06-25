@@ -24,8 +24,8 @@ class CouponAdmin(admin.ModelAdmin):
     list_filter = ['discount_type', 'active', 'created_at', 'expires_at']
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'product', 'product_variant', 'quantity', 'created_at', 'updated_at', 'status', 'coupon', 'shipping_method', 'payment_method', 'tracking_number', 'total_price']
-    search_fields = ['user__username', 'product__title', 'product_variant__product__title', 'tracking_number']
+    list_display = ['id', 'user', 'product', 'product_variant', 'quantity', 'created_at', 'updated_at', 'status', 'coupon', 'shipping_method', 'payment_method', 'tracking_number','order_code', 'total_price']
+    search_fields = ['user__username', 'product__title', 'product_variant__product__title', 'tracking_number','order_code']
     list_filter = ['status', 'shipping_method', 'payment_method', 'created_at', 'updated_at']
     readonly_fields = ['total_price', 'order_code' , 'apply_coupon_price', 'shipping_charge', 'product_price', 'subtotal_price']
 

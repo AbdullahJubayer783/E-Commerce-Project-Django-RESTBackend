@@ -31,10 +31,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+
     # Internal Packege
     'backend_api.product',
     'backend_api.account',
     'backend_api.order_system',
+    # 'backend_api.payment',
 ]
 
 MIDDLEWARE = [
@@ -164,3 +166,11 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+
+
+# SSLCommerz Settings
+
+SSL_COMMERZ_STORE_ID = env("SSL_COMMERZ_STORE_ID")
+SSL_COMMERZ_STORE_PASSWORD = env("SSL_COMMERZ_STORE_PASSWORD")
+SSL_COMMERZ_API_URL = 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php'  # Use the live URL for production

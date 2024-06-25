@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import Cart , Order, Address, Coupon
 
 # Cart 
-# ------------------------------------------------------------------------
 
 class CartCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,9 +52,13 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'product', 'product_variant', 'quantity', 'created_at', 'updated_at', 'status', 'coupon', 
             'shipping_address', 'billing_address', 'shipping_method', 'payment_method', 'tracking_number', 
-            'total_price', 'apply_coupon_price', 'shipping_charge', 'product_price', 'subtotal_price'
+            'total_price', 'apply_coupon_price', 'shipping_charge', 'product_price', 'subtotal_price','order_code'
         ]
-
+    def create(self, validated_data):
+        order = super().create(validated_data)
+        order.status = 'Pending'
+        order.save()
+        return order
 
 class OrderGetSerializer(serializers.ModelSerializer):
     total_price = serializers.ReadOnlyField()
@@ -69,6 +72,15 @@ class OrderGetSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'product', 'product_variant', 'quantity', 'created_at', 'updated_at', 'status', 'coupon', 
             'shipping_address', 'billing_address', 'shipping_method', 'payment_method', 'tracking_number', 
-            'total_price', 'apply_coupon_price', 'shipping_charge', 'product_price', 'subtotal_price'
+            'total_price', 'apply_coupon_price', 'shipping_charge', 'product_price', 'subtotal_price','order_code'
         ]
         depth = 3
+
+
+from .models import Payment
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'
