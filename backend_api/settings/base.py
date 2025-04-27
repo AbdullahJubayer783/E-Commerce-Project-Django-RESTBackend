@@ -13,7 +13,9 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    
+]
 
 
 INSTALLED_APPS = [
@@ -114,6 +116,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://127.0.0.1:5500",
+    "https://shophub-e-commerce.onrender.com",
 ]
 
 REST_FRAMEWORK = {
@@ -128,8 +131,6 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES':('rest_framework.renderers.JSONRenderer',)
 }
 
-# JWT Settings
-
 PASSWORD_RESET_TIMEOUT=900
 
 EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
@@ -138,6 +139,9 @@ EMAIL_PORT=587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
+
+# JWT Settings
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
@@ -173,4 +177,4 @@ SIMPLE_JWT = {
 
 SSL_COMMERZ_STORE_ID = env("SSL_COMMERZ_STORE_ID")
 SSL_COMMERZ_STORE_PASSWORD = env("SSL_COMMERZ_STORE_PASSWORD")
-SSL_COMMERZ_API_URL = 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php'  # Use the live URL for production
+SSL_COMMERZ_API_URL = 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php' 
