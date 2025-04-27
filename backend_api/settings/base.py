@@ -14,7 +14,9 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    
+    'shophub-e-commerce.onrender.com',
+    'localhost',
+    '127.0.0.1'
 ]
 
 
