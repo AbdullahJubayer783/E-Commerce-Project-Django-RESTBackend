@@ -19,7 +19,9 @@ class Brand(models.Model):
 
 # Category
 class Category(MPTTModel):
+    cat_logo = models.ImageField(upload_to='backend_api/product/media/category_image',null=True, blank=True)
     name = models.CharField(max_length=150)
+    cat_description = models.TextField(null=True, blank=True)
     slug = models.SlugField(max_length=240)
     parent = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True)
 
