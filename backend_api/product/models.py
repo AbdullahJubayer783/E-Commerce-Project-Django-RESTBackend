@@ -47,8 +47,8 @@ class Size(models.Model):
 class ProductAndVariantsCommonFields(models.Model):
     size = models.ManyToManyField(Size)
     quantity = models.SmallIntegerField()
-    selling_price = models.SmallIntegerField()
-    discounted_price = models.SmallIntegerField()
+    selling_price = models.SmallIntegerField(default=0)
+    discounted_price = models.SmallIntegerField(default=0)
 
     class Meta:
         abstract = True
@@ -71,10 +71,18 @@ class Product(ProductAndVariantsCommonFields):
         get_latest_by = ["-created_at"]
         verbose_name_plural = "Product"
 
+    # @property
+    # def discount_percent(self):
+    #     return round(abs(((self.discounted_price / self.selling_price) * 100) - 100), 2)
     @property
     def discount_percent(self):
-        return round(abs(((self.discounted_price / self.selling_price) * 100) - 100), 2)
-    
+        if self.discounted_price is not None and self.selling_price:
+            try:
+                return round(abs(((self.discounted_price / self.selling_price) * 100) - 100), 2)
+            except ZeroDivisionError:
+                return 0
+        return 0
+        
     @property
     def product_code(self):
         code = '#' + get_random_string(10).upper()
